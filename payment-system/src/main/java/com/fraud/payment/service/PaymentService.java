@@ -3,6 +3,7 @@ package com.fraud.payment.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.scheduling.annotation.Async; // 1. 임포트 추가
 import com.fasterxml.jackson.databind.ObjectMapper; 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +15,7 @@ public class PaymentService {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper = new ObjectMapper(); // JSON 변환기
 
+    @Async("paymentTaskExecutor") // 2. 비동기 스레드 풀 지정
     public void sendPaymentRequest(String orderId, Long userId, Double timeDiff,
                                    Integer locDiff, Integer isNight, Integer isHighAmount) {
         try {
